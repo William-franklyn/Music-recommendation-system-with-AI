@@ -44,6 +44,8 @@ The catalog is small and was not drawn from any real streaming platform. It refl
 
 ## 6. Limitations and Bias
 
+The weighted-sum scoring method (Section 3) was a deliberate design choice, not a limitation the author didn't notice. A more sophisticated approach (e.g., cosine similarity over feature vectors, or an ML-based recommender) was considered and rejected specifically because it would be harder to explain through the confidence labels shown to users — see Section 9 for that design discussion. The items below are the explicit cost of prioritizing transparency over sophistication.
+
 - **Binary genre matching:** "indie pop" and "pop" score as completely different genres despite being closely related. This means cross-genre users get lower scores even when the catalog has relevant songs.
 - **Tiny catalog:** With only 10 songs, users asking for k=8 or more will receive low-confidence results that don't genuinely match their preferences.
 - **No diversity enforcement:** The top results may all be from the same artist or subgenre if the catalog happens to cluster that way.
