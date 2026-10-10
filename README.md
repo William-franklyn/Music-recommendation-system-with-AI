@@ -2,7 +2,7 @@
 
 **Base project:** Music Recommender Simulation (Module 3)
 
-The original project scaffolded a rule-based music recommender with `Song` and `UserProfile` dataclasses and stub functions for loading songs, scoring, and generating explanations. This final project fully implements and extends that system into a complete applied AI application featuring a Streamlit UI, Gemini API RAG integration, structured logging, input guardrails, and a 7-test automated test suite.
+The original project scaffolded a rule-based music recommender with `Song` and `UserProfile` dataclasses and stub functions for loading songs, scoring, and generating explanations. This final project fully implements and extends that system into a complete applied AI application featuring a Streamlit UI, Claude API RAG integration, structured logging, input guardrails, and a 7-test automated test suite.
 
 ---
 
@@ -22,7 +22,7 @@ flowchart TD
     G["📂 Data\ndata/songs.csv\n10 songs · 6 genres · 6 moods"] --> B
     B["🔍 Retrieval Layer\nsrc/recommender.py\nload_songs · _score_song\nrecommend_songs → top-k ranked"] --> C
     B --> E
-    C["🤖 Generation Layer — RAG\nsrc/ai_explainer.py\nGrounded prompt from retrieved songs\nGemini API call · Graceful fallback"] --> A
+    C["🤖 Generation Layer — RAG\nsrc/ai_explainer.py\nGrounded prompt from retrieved songs\nClaude API call · Graceful fallback"] --> A
     E["🛡️ Guardrails + Logging\nguardrails.py · logger_config.py\nValidate inputs · JSON-lines log"]
 
     style H fill:#DDA0DD,color:#000
@@ -37,7 +37,7 @@ flowchart TD
 
 **AI Feature: Retrieval-Augmented Generation (RAG)**
 1. **Retrieval** — the recommender scores all 10 songs using a weighted feature match (genre 35%, mood 30%, energy proximity 25%, acousticness 10%) and returns the top-k matches.
-2. **Generation** — the retrieved song data is injected into a Gemini prompt, which writes a natural language explanation grounded only in those songs. Gemini cannot hallucinate titles or attributes because all data comes from the retrieval step.
+2. **Generation** — the retrieved song data is injected into a Claude prompt, which writes a natural language explanation grounded only in those songs. Claude cannot hallucinate titles or attributes because all data comes from the retrieval step.
 
 ---
 
@@ -65,7 +65,7 @@ Confidence labels: **High** (score ≥ 0.7) · **Medium** (≥ 0.45) · **Low** 
 ### Prerequisites
 
 - Python 3.9+
-- A Gemini API key (optional — the app works without one; AI explanations are disabled gracefully)
+- An Anthropic (Claude) API key (optional — the app works without one; AI explanations are disabled gracefully)
 
 ### Setup
 
@@ -85,13 +85,13 @@ Confidence labels: **High** (score ≥ 0.7) · **Medium** (≥ 0.45) · **Low** 
    pip install -r requirements.txt
    ```
 
-4. (Optional) Create a `.env` file in the project root to enable Gemini AI explanations:
+4. (Optional) Create a `.env` file in the project root to enable Claude AI explanations:
 
    ```
-   GEMINI_API_KEY=your_key_here
+   ANTHROPIC_API_KEY=your_key_here
    ```
 
-   Get a free key at [aistudio.google.com](https://aistudio.google.com).
+   Get a key at [console.anthropic.com](https://console.anthropic.com).
 
 ### Running the Streamlit UI
 
@@ -139,7 +139,7 @@ Input: genre=pop, mood=happy, energy=0.85, likes_acoustic=False
 [Confidence: Medium] Matches your favorite genre (pop); has similar energy to your target.
 ```
 
-Gemini's take: *"These selections were curated with your upbeat, high-energy pop taste in mind. Sunrise City by Neon Echo is a near-perfect match — its pop genre, happy mood, and 0.93 energy align almost exactly with your preferences..."*
+Claude's take: *"These selections were curated with your upbeat, high-energy pop taste in mind. Sunrise City by Neon Echo is a near-perfect match — its pop genre, happy mood, and 0.93 energy align almost exactly with your preferences..."*
 
 ---
 
@@ -155,7 +155,7 @@ Input: genre=lofi, mood=chill, energy=0.35, likes_acoustic=True
 [Confidence: High] Matches your favorite genre (lofi); fits your 'chill' mood; has similar energy to your target.
 ```
 
-Gemini's take: *"Both picks lean into your love of calm, acoustic lofi textures. Library Rain's acousticness of 0.86 and relaxed energy of 0.35 make it a natural match..."*
+Claude's take: *"Both picks lean into your love of calm, acoustic lofi textures. Library Rain's acousticness of 0.86 and relaxed energy of 0.35 make it a natural match..."*
 
 ---
 
@@ -178,8 +178,8 @@ This shows how the 30% mood weight surfaces cross-genre results when no genre ma
 ## Design Decisions
 
 - **Weighted scoring instead of ML model:** A transparent formula makes confidence scores interpretable and requires no training data or external APIs beyond what's in the CSV.
-- **RAG over pure generation:** Injecting retrieved song data into the prompt prevents Gemini from hallucinating song titles or inventing musical features.
-- **One Gemini call for all results:** A single paragraph about the whole playlist is more coherent and cheaper than per-song calls.
+- **RAG over pure generation:** Injecting retrieved song data into the prompt prevents Claude from hallucinating song titles or inventing musical features.
+- **One Claude call for all results:** A single paragraph about the whole playlist is more coherent and cheaper than per-song calls.
 - **Graceful degradation:** If no API key is set, all rule-based features still work. The app never crashes due to a missing key.
 
 ---
@@ -201,10 +201,10 @@ In the Streamlit UI, blocked inputs show as a red error banner and stop executio
 
 ### AI Explanation Fallback
 
-If no `GEMINI_API_KEY` is set (or the API quota is exceeded), the system falls back gracefully:
+If no `ANTHROPIC_API_KEY` is set (or the API quota is exceeded), the system falls back gracefully:
 
 ```
-[AI explanation unavailable: set GEMINI_API_KEY in your .env file to enable this feature]
+[AI explanation unavailable: set ANTHROPIC_API_KEY in your .env file to enable this feature]
 ```
 
 All rule-based recommendations, confidence scores, and explanations continue to work normally. The fallback is an intentional design decision — the core system never depends on the AI layer being available.
@@ -233,7 +233,7 @@ The system struggled with cross-genre recommendations — if a user's favorite g
 
 ## Reflection
 
-Building this system clarified how much recommender "intelligence" is really just engineered feature weights. The scoring algorithm makes every decision explicit and auditable — unlike a neural recommendation model where the reasoning is opaque. The RAG integration demonstrated why grounding AI generation in retrieved data matters: without injecting actual song attributes into the prompt, Gemini could plausibly make up details.
+Building this system clarified how much recommender "intelligence" is really just engineered feature weights. The scoring algorithm makes every decision explicit and auditable — unlike a neural recommendation model where the reasoning is opaque. The RAG integration demonstrated why grounding AI generation in retrieved data matters: without injecting actual song attributes into the prompt, Claude could plausibly make up details.
 
 A real production system would need collaborative filtering, much larger catalogs, and careful fairness audits to avoid over-representing popular genres at the expense of niche tastes.
 

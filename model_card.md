@@ -2,7 +2,7 @@
 
 ## 1. Model Name
 
-**VibeFinder 1.0** — Rule-Based Scoring + Gemini RAG
+**VibeFinder 1.0** — Rule-Based Scoring + Claude RAG
 
 ---
 
@@ -18,7 +18,7 @@ The system works in two stages.
 
 **Stage 1 — Retrieval:** Every song in the catalog is given a match score between 0 and 1. The score is the weighted sum of four factors: whether the song's genre matches the user's favorite (35% of the score), whether the mood matches (30%), how close the song's energy level is to the user's target (25%), and whether the acousticness aligns with the user's acoustic preference (10%). Songs are then ranked from highest to lowest score, and the top results are selected.
 
-**Stage 2 — Generation (RAG):** The retrieved songs, along with all their attributes, are passed to Gemini. Gemini writes a short, conversational paragraph explaining why those specific songs were chosen. Because Gemini only sees the song data that was retrieved, it cannot invent songs that aren't in the catalog — this is the "retrieval-augmented" part of the design.
+**Stage 2 — Generation (RAG):** The retrieved songs, along with all their attributes, are passed to Claude. Claude writes a short, conversational paragraph explaining why those specific songs were chosen. Because Claude only sees the song data that was retrieved, it cannot invent songs that aren't in the catalog — this is the "retrieval-augmented" part of the design.
 
 Confidence labels (High / Medium / Low) are shown next to each song based on its score.
 
@@ -36,9 +36,9 @@ The catalog is small and was not drawn from any real streaming platform. It refl
 
 - The scoring is fully transparent — a user can see exactly why a song ranked where it did.
 - Confidence labels make uncertainty visible rather than hiding it.
-- The system works offline without any API key; the Gemini explanation is optional.
+- The system works offline without any API key; the Claude explanation is optional.
 - Genre and mood matching are reliable when the catalog contains songs that match the user's preferences.
-- The RAG design ensures Gemini cannot hallucinate songs or fabricate musical details.
+- The RAG design ensures Claude cannot hallucinate songs or fabricate musical details.
 
 ---
 

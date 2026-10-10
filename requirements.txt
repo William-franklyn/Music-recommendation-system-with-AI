@@ -1,5 +1,5 @@
 pandas
 pytest
 streamlit
-google-genai
+anthropic
 python-dotenv

@@ -14,7 +14,7 @@ setup_logging()
 
 st.set_page_config(page_title="VibeFinder", page_icon="🎵", layout="wide")
 st.title("VibeFinder — AI Music Recommender")
-st.caption("Powered by a weighted scoring engine + Gemini AI explanations (RAG)")
+st.caption("Powered by a weighted scoring engine + Claude AI explanations (RAG)")
 
 with st.sidebar:
     st.header("Your Taste Profile")
@@ -26,7 +26,7 @@ with st.sidebar:
     )
     likes_acoustic = st.checkbox("I prefer acoustic sounds", value=False)
     k = st.slider("Number of recommendations", 1, 10, 5)
-    use_ai = st.checkbox("Generate AI explanation with Gemini", value=True)
+    use_ai = st.checkbox("Generate AI explanation with Claude", value=True)
     run_btn = st.button("Find My Songs", type="primary")
 
 if run_btn:
@@ -73,8 +73,8 @@ if run_btn:
 
     if use_ai:
         st.divider()
-        st.subheader("Gemini's Take on Your Playlist")
-        with st.spinner("Asking Gemini..."):
+        st.subheader("Claude's Take on Your Playlist")
+        with st.spinner("Asking Claude..."):
             ai_text = get_ai_explanation(user_prefs, results)
         st.info(ai_text)
 else:

@@ -3,7 +3,7 @@ flowchart TD
 
     B["🔍 Retrieval Layer\nsrc/recommender.py\nload_songs() → pandas CSV\n_score_song() → weighted match\nrecommend_songs() → top-k ranked"] --> C
 
-    C["🤖 Generation Layer (RAG)\nsrc/ai_explainer.py\nBuild grounded prompt from retrieved songs\nCall Gemini API\nReturn natural language explanation"] --> D
+    C["🤖 Generation Layer (RAG)\nsrc/ai_explainer.py\nBuild grounded prompt from retrieved songs\nCall Claude API\nReturn natural language explanation"] --> D
 
     B --> E
 

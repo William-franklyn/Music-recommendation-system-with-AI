@@ -2,7 +2,7 @@ import logging
 import os
 from typing import Dict, List, Tuple
 
-from google import genai
+import anthropic
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,17 +12,17 @@ logger = logging.getLogger(__name__)
 def get_ai_explanation(
     user_prefs: Dict,
     top_songs: List[Tuple[Dict, float, str]],
-    model: str = "gemini-2.0-flash-lite",
+    model: str = "claude-haiku-4-5-20251001",
 ) -> str:
     """
     RAG generation layer: takes retrieved top-k songs and user preferences,
-    returns a Gemini-generated natural language explanation.
+    returns a Claude-generated natural language explanation.
     Falls back gracefully if the API key is missing or the call fails.
     """
-    api_key = os.getenv("GEMINI_API_KEY")
+    api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
-        logger.warning("GEMINI_API_KEY not set; skipping AI explanation")
-        return "[AI explanation unavailable: set GEMINI_API_KEY in your .env file to enable this feature]"
+        logger.warning("ANTHROPIC_API_KEY not set; skipping AI explanation")
+        return "[AI explanation unavailable: set ANTHROPIC_API_KEY in your .env file to enable this feature]"
 
     song_lines = []
     for i, (song, score, _) in enumerate(top_songs, 1):
@@ -52,11 +52,15 @@ def get_ai_explanation(
     )
 
     try:
-        client = genai.Client(api_key=api_key)
-        response = client.models.generate_content(model=model, contents=prompt)
-        explanation = response.text.strip()
-        logger.info(f"Gemini explanation generated ({len(explanation)} chars)")
+        client = anthropic.Anthropic(api_key=api_key)
+        response = client.messages.create(
+            model=model,
+            max_tokens=300,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        explanation = response.content[0].text.strip()
+        logger.info(f"Claude explanation generated ({len(explanation)} chars)")
         return explanation
     except Exception as e:
-        logger.error(f"Gemini API error: {e}")
+        logger.error(f"Claude API error: {e}")
         return f"[AI explanation unavailable: {str(e)}]"
