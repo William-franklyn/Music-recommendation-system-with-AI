@@ -55,7 +55,7 @@ def _build_rule_explanation(song: Dict, user_prefs: Dict, score: float) -> str:
         parts.append("has similar energy to your target")
     if not parts:
         parts.append("is a reasonable match for your overall taste")
-    confidence = "High" if score >= 0.7 else "Medium" if score >= 0.45 else "Low"
+    confidence = "High" if score >= 0.7 else "Medium" if score >= 0.45 else "Low" 
     return f"[Confidence: {confidence}] " + "; ".join(parts).capitalize() + "."
 
 
