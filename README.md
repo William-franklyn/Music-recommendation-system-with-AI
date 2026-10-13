@@ -43,9 +43,9 @@ flowchart TD
 
 ## How the System Works
 
-Each `Song` has: title, artist, genre, mood, energy (0–1), tempo (BPM), valence, danceability, acousticness.
+Each song entry has: title, artist, genre, mood, energy (0–1), tempo (BPM), valence, danceability, acousticness.
 
-Each `UserProfile` stores: favorite genre, favorite mood, target energy level (0–1), and acoustic preference.
+Each user profile has: favorite genre, favorite mood, target energy level (0–1), and acoustic preference.
 
 The scoring algorithm computes a weighted sum:
 
