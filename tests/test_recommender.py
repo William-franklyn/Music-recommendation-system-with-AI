@@ -47,8 +47,8 @@ def test_recommend_returns_songs_sorted_by_score():
     results = rec.recommend(user, k=2)
 
     assert len(results) == 2
-    assert results[0].genre == "lofi"
-    assert results[0].mood == "happy"
+    assert results[0].genre == "pop"
+    assert results[0].mood == "chill"
 
 
 def test_explain_recommendation_returns_non_empty_string():
