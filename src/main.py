@@ -29,7 +29,7 @@ def main() -> None:
 
     print("\nTop recommendations:\n")
     for song, score, explanation in recommendations:
-        print(f"  {song['title']} by {song['artist']} — Score: {score:.2f}")
+        print(f"  {song['title']} by {song['artist']} - Score: {score:.2f}")
         print(f"  {explanation}\n")
 
 
