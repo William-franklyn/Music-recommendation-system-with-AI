@@ -143,6 +143,16 @@ python eval.py
 
 Runs 5 predefined user profiles through the recommender and 4 guardrail edge cases, then prints a pass/fail summary. No API key needed.
 
+### Deactivating the Virtual Environment
+
+When you're done working, leave the venv with:
+
+```bash
+deactivate
+```
+
+This works the same way on macOS/Linux and Windows (PowerShell or cmd.exe). Your prompt's `(.venv)` prefix disappears once it's deactivated. This only affects your current terminal session — it doesn't delete anything, so activating again later (`.venv\Scripts\Activate.ps1` on Windows PowerShell, `source .venv/bin/activate` on macOS/Linux) picks up right where you left off.
+
 ---
 
 ## Sample Interactions
