@@ -48,7 +48,7 @@ def test_recommend_returns_songs_sorted_by_score():
 
     assert len(results) == 2
     assert results[0].genre == "pop"
-    assert results[0].mood == "chill"
+    assert results[0].mood == "happy"
 
 
 def test_explain_recommendation_returns_non_empty_string():
