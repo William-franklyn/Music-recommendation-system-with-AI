@@ -135,6 +135,18 @@ pytest
 
 All 7 tests pass without an API key.
 
+To run any single test in isolation, use `pytest <file>::<test_name>`:
+
+```bash
+pytest tests/test_recommender.py::test_recommend_returns_songs_sorted_by_score -v
+pytest tests/test_recommender.py::test_explain_recommendation_returns_non_empty_string -v
+pytest tests/test_recommender.py::test_load_songs_returns_list_of_dicts -v
+pytest tests/test_recommender.py::test_recommend_songs_respects_k -v
+pytest tests/test_recommender.py::test_recommend_songs_sorted_descending -v
+pytest tests/test_recommender.py::test_guardrail_rejects_invalid_energy -v
+pytest tests/test_recommender.py::test_explain_recommendation_contains_confidence -v
+```
+
 ### Running the Evaluation Script
 
 ```bash
@@ -142,6 +154,29 @@ python eval.py
 ```
 
 Runs 5 predefined user profiles through the recommender and 4 guardrail edge cases, then prints a pass/fail summary. No API key needed.
+
+### Inspecting Individual Scoring Factors
+
+```bash
+python score_breakdown.py
+```
+
+The weighted-sum formula in `_score_song()` (`src/recommender.py`) blends four factors — genre (35%), mood (30%), energy proximity (25%), acoustic preference (10%) — into one number, which makes it hard to see what any single factor is actually doing just by looking at a final score. This script prints the raw sub-score, weight, and weighted contribution for all four factors, run against four preset (song, user profile) pairs — each one deliberately chosen so a different factor dominates the total:
+
+```
+=== Genre isolated ===
+Song: "Gym Hero" by Max Pulse (genre=pop, mood=intense, energy=0.93, acousticness=0.05)
+User prefs: {'genre': 'pop', 'mood': 'chill', 'energy': 0.0, 'likes_acoustic': True}
+factor    raw score   weight    contribution
+genre     1.00        0.35      0.3500
+mood      0.00        0.30      0.0000
+energy    0.07        0.25      0.0175
+acoustic  0.05        0.10      0.0050
+TOTAL                           0.3725
+-> 'genre' drives 94% of this score
+```
+
+The other three presets (`Mood isolated`, `Energy isolated`, `Acoustic preference isolated`) follow the same pattern — each picks a song/profile pair where three of the four factors are driven near zero, so the remaining factor's contribution to the total is unmistakable. Useful for explaining *why* a given score came out the way it did, one factor at a time, without needing to trace through `recommend_songs()` by hand.
 
 ### Deactivating the Virtual Environment
 
