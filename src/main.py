@@ -18,7 +18,7 @@ def main() -> None:
 
     songs = load_songs("data/songs.csv")
 
-    user_prefs = {"genre": "pop", "mood": "happy", "energy": 0.8, "likes_acoustic": False}
+    user_prefs = {"genre": "", "mood": "happy", "energy": 1.5, "likes_acoustic": False}
 
     is_valid, err = validate_user_prefs(user_prefs)
     if not is_valid:
