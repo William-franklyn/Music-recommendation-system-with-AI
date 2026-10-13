@@ -39,7 +39,7 @@ def make_small_recommender() -> Recommender:
 def test_recommend_returns_songs_sorted_by_score():
     user = UserProfile(
         favorite_genre="pop",
-        favorite_mood="chill",
+        favorite_mood="happy",
         target_energy=0.8,
         likes_acoustic=False,
     )
@@ -47,7 +47,7 @@ def test_recommend_returns_songs_sorted_by_score():
     results = rec.recommend(user, k=2)
 
     assert len(results) == 2
-    assert results[0].genre == "pop"
+    assert results[0].genre == "lofi"
     assert results[0].mood == "happy"
 
 
