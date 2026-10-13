@@ -69,29 +69,47 @@ Confidence labels: **High** (score ≥ 0.7) · **Medium** (≥ 0.45) · **Low** 
 
 ### Setup
 
-1. Clone the repository and enter the folder.
+1. Clone the repository and move into the project folder — all later commands assume you're standing inside this folder:
+
+   ```bash
+   git clone https://github.com/William-franklyn/Music-recommendation-system-with-AI.git
+   cd Music-recommendation-system-with-AI
+   ```
 
 2. Create a virtual environment (recommended):
 
    ```bash
    python -m venv .venv
-   source .venv/bin/activate      # Mac/Linux
-   .venv\Scripts\activate         # Windows
    ```
 
-3. Install dependencies:
+3. Activate it. **You must do this every time you open a new terminal**, before installing or running anything — activation doesn't persist across terminal sessions:
+
+   | Shell | Command |
+   |---|---|
+   | macOS/Linux (bash/zsh) | `source .venv/bin/activate` |
+   | Windows (PowerShell) | `.venv\Scripts\Activate.ps1` |
+   | Windows (cmd.exe) | `.venv\Scripts\activate.bat` |
+
+   You'll know it worked when your prompt is prefixed with `(.venv)`.
+
+   **Windows PowerShell only:** if activation fails with *"running scripts is disabled on this system,"* run this once (no admin rights needed), then retry:
+   ```powershell
+   Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+   ```
+
+4. Install dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. (Optional) Create a `.env` file in the project root to enable Claude AI explanations:
+5. (Optional) Create a `.env` file in the project root to enable Claude AI explanations:
 
    ```
    ANTHROPIC_API_KEY=your_key_here
    ```
 
-   Get a key at [console.anthropic.com](https://console.anthropic.com).
+   Get a key at [console.anthropic.com](https://console.anthropic.com). Never commit this file — it's already excluded via `.gitignore`.
 
 ### Running the Streamlit UI
 
@@ -99,7 +117,9 @@ Confidence labels: **High** (score ≥ 0.7) · **Medium** (≥ 0.45) · **Low** 
 streamlit run app.py
 ```
 
-Open the browser URL shown in the terminal. Use the sidebar to set your preferences and click **Find My Songs**.
+Run this from inside the project folder (the one containing `app.py`). If you see `File does not exist: app.py`, you're in the wrong directory — `cd` into the project folder first.
+
+Open the browser URL shown in the terminal (usually `http://localhost:8501`). Use the sidebar to set your preferences and click **Find My Songs**.
 
 ### Running the CLI
 
